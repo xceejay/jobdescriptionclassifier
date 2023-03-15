@@ -212,13 +212,13 @@ if __name__ == '__main__':
     test_features_txtsim = textsimilarity(text_pairs=[test_pairs[id] for id in sorted(test_pairs.keys())], word2vec_model=word2vec_model)
     train_features = np.hstack((train_features_job, train_features_txtsim))
     test_features = np.hstack((test_features_job, test_features_txtsim))
-    train_features = preprocessing.scale(train_features)
-    test_features = preprocessing.scale(test_features)
-    train_features, test_features = normalize_features(train_features=train_features, test_features=test_features)
+    train_features = preprocessing.scale(train_features) #wherecomments 
+    test_features = preprocessing.scale(test_features) #wherecomments 
+    train_features, test_features = normalize_features(train_features=train_features, test_features=test_features) #wherecomments 
     features = np.vstack((train_features, test_features))
     np.savetxt('./data/features.txt', features)
     sanity_check(word2vec_model,job_description)
-    pdb.set_trace()
+    # pdb.set_trace()
 
 
 
