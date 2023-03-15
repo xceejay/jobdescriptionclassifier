@@ -21,6 +21,8 @@ word2vec_model = None
 job_description = None
 word2vec_file = './data/googlenews.bin.gz'
 occupation_file = './data/OccupationData.tsv'
+# occupation_file = './data/OccupationData_half.tsv'
+
 regex = re.compile('[%s]' % re.escape(string.punctuation))
 
 
@@ -186,9 +188,16 @@ def import_train_test_data(train_file, test_file):
 
 
 def sanity_check(word2vec_model, job_description):
+    query=""
+    while query!="stop":
+        query=input("Let us Test this: ")
+    
     # just for sanity check
-    text_job_distances = get_job_dict_ordered({1:'i love plants'}, job_description, word2vec_model)
-    print(list(text_job_distances[1].keys())[0:30]) 
+
+        text_job_distances = get_job_dict_ordered({1:query}, job_description, word2vec_model)
+    # print(list(text_job_distances[1].keys())[0:30]) 
+        print(list(text_job_distances[1].keys())[0:10]) 
+    
 
 def write_features(feature_file, features):
     np.savetxt(feature_file, features)
@@ -212,9 +221,9 @@ if __name__ == '__main__':
     test_features_txtsim = textsimilarity(text_pairs=[test_pairs[id] for id in sorted(test_pairs.keys())], word2vec_model=word2vec_model)
     train_features = np.hstack((train_features_job, train_features_txtsim))
     test_features = np.hstack((test_features_job, test_features_txtsim))
-    # train_features = preprocessing.scale(train_features) #wherecomments 
-    # test_features = preprocessing.scale(test_features) #wherecomments 
-    # train_features, test_features = normalize_features(train_features=train_features, test_features=test_features) #wherecomments 
+    train_features = preprocessing.scale(train_features) #wherecomments 
+    test_features = preprocessing.scale(test_features) #wherecomments 
+    train_features, test_features = normalize_features(train_features=train_features, test_features=test_features) #wherecomments 
     features = np.vstack((train_features, test_features))
     np.savetxt('./data/features.txt', features)
     sanity_check(word2vec_model,job_description)
